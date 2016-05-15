@@ -1,6 +1,6 @@
 [package]
 name = "progress-rs"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Norbert Melzer <timmelzer@gmail.com>"]
 
 description = "Display a progressbar on the terminal"
