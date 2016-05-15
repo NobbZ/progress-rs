@@ -7,6 +7,8 @@ pub struct Progress {
     current: usize,
     total: usize,
 
+    caption: String,
+
     started: bool
 }
 
@@ -52,6 +54,10 @@ impl Progress {
         self.started = true;
         self
     }
+
+    pub fn caption(&self) -> &String {
+        &self.caption
+    }
 }
 
 fn print_bar(p: &Progress) {
@@ -59,7 +65,7 @@ fn print_bar(p: &Progress) {
                          current = p.current(),
                          total   = p.total(),
                          process = p.process());
-    let caption = "Progress";
+    let caption = p.caption();
 
     let bar_width  = 79 - p_info.len() - caption.len() - 3 - 2;
     let done_width = (bar_width * p.process() as usize) / 100;
