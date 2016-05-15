@@ -1,5 +1,6 @@
 use std::io::Write;
 
+/// Tracks progress of a task
 pub struct Progress {
     current: usize,
     total: usize,
@@ -8,10 +9,12 @@ pub struct Progress {
 }
 
 impl Progress {
+    /// Creates a new one
     pub fn new(current: usize, total: usize) -> Self {
         Progress { current: current, total: total, started: false }
     }
 
+    /// Creates a new progress with default values.
     pub fn default() -> Self {
         Progress::new(0, 100)
     }
