@@ -1,5 +1,7 @@
 use std::io::Write;
 
+pub mod builder;
+
 /// Tracks progress of a task
 pub struct Progress {
     current: usize,
