@@ -1,6 +1,6 @@
 [package]
 name = "progress-rs"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Norbert Melzer <timmelzer@gmail.com>"]
 
 description = "Display a progressbar on the terminal"
@@ -16,5 +16,3 @@ name = "progress"
 terminal_size = "^0.1.5"
 
 [dev-dependencies]
-quickcheck = "0.2"
-quickcheck_macros = "0.2"

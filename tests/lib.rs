@@ -1,13 +1,6 @@
-#![cfg_attr(test, feature(plugin))]
-#![cfg_attr(test, plugin(quickcheck_macros))]
-
 extern crate progress;
 
-extern crate quickcheck;
-
 use progress::builder::ProgressBuilder;
-
-use quickcheck::TestResult;
 
 #[test]
 fn generated_with_default_values() {
@@ -17,72 +10,74 @@ fn generated_with_default_values() {
     assert_eq!(100, p.total());
 }
 
-#[quickcheck]
-fn creates_progress_bar(c: usize, t: usize) -> bool {
+#[test]
+fn creates_progress_bar() {
     let p = ProgressBuilder::new()
-        .set_start(c)
-        .set_finish(t)
+        .set_start(5)
+        .set_finish(14)
         .build();
 
-    (p.current() == c) && (p.total() == t)
+    assert_eq!(5, p.current());
+    assert_eq!(14, p.total());
 }
 
-#[quickcheck]
-fn increments_one(c: usize, t: usize) -> TestResult {
-    if c >= t { return TestResult::discard() }
+#[test]
+fn increments_one() {
     let mut p = ProgressBuilder::new()
-        .set_start(c)
-        .set_finish(t)
+        .set_start(1)
+        .set_finish(192)
         .build();
+
+    assert_eq!(1, p.current());
     p.increment();
-    TestResult::from_bool(p.current() == c + 1)
+    assert_eq!(2, p.current());
 }
 
-#[quickcheck]
-fn do_not_increment_above_total(t: usize) -> bool {
+#[test]
+fn do_not_increment_above_total() {
     let mut p = ProgressBuilder::new()
-        .set_start(t)
-        .set_finish(t)
+        .set_start(100)
         .build();
+    assert_eq!(100, p.current());
     p.increment();
-    p.current() == p.total()
+    assert_eq!(100, p.current());
 }
 
-#[quickcheck]
-fn decrements_one(c: usize, t: usize) -> TestResult {
-    if c == 0 { return TestResult::discard() }
+#[test]
+fn decrements_one() {
     let mut p = ProgressBuilder::new()
-        .set_start(c)
-        .set_finish(t)
+        .set_start(235)
+        .set_finish(1232)
         .build();
+    assert_eq!(235, p.current());
     p.decrement();
-    TestResult::from_bool(p.current() == c - 1)
+    assert_eq!(234, p.current());
 }
 
-#[quickcheck]
-fn do_not_decrement_below_zero(t: usize) -> bool {
+#[test]
+fn do_not_decrement_below_zero() {
     let mut p = ProgressBuilder::new()
-        .set_finish(t)
+        .set_finish(124)
         .build();
+    assert_eq!(0, p.current());
     p.decrement();
-    p.current() == 0
+    assert_eq!(0, p.current());
 }
 
-#[quickcheck]
-fn not_finished_while_in_progress(c: usize, t: usize) -> TestResult {
-    if c >= t { return TestResult::discard() }
+#[test]
+fn not_finished_while_in_progress() {
     let p = ProgressBuilder::new()
-        .set_start(c)
-        .set_finish(t)
+        .set_start(1)
+        .set_finish(345)
         .build();
-    TestResult::from_bool(!p.finished())
+    assert!(!p.finished());
 }
 
-#[quickcheck]
-fn finished_when_finished(t: usize) -> bool {
+#[test]
+fn finished_when_finished() {
     let p = ProgressBuilder::new()
-        .set_start(t)
-        .set_finish(t)
+        .set_start(124)
+        .set_finish(124)
         .build();
-    p.finished()
+    assert!(p.finished());
 }
