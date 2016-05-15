@@ -10,17 +10,13 @@ pub struct Progress {
     started: bool
 }
 
+impl Default for Progress {
+    fn default() -> Progress {
+        builder::ProgressBuilder::default().build()
+    }
+}
+
 impl Progress {
-    /// Creates a new one
-    pub fn new(current: usize, total: usize) -> Self {
-        Progress { current: current, total: total, started: false }
-    }
-
-    /// Creates a new progress with default values.
-    pub fn default() -> Self {
-        Progress::new(0, 100)
-    }
-
     pub fn current(&self) -> usize {
         self.current
     }
