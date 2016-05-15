@@ -1,4 +1,8 @@
+extern crate terminal_size;
+
 use std::io::Write;
+
+use terminal_size::{Width, Height, terminal_size};
 
 pub mod builder;
 
@@ -67,7 +71,14 @@ fn print_bar(p: &Progress) {
                          process = p.process());
     let caption = p.caption();
 
-    let bar_width  = 79 - p_info.len() - caption.len() - 3 - 2;
+    let (Width(terminal_width), _) = terminal_size()
+        .unwrap_or((Width(79), Height(0)));
+
+    let bar_width  = terminal_width as usize // Width of terminal
+        - p_info.len()  // Width of right summary
+        - caption.len() // Width of caption
+        - 3  // Colon and spaces
+        - 2; // vertical bars in the progress meter
     let done_width = (bar_width * p.process() as usize) / 100;
     let todo_width = bar_width - done_width;
     let done_bar   = std::iter::repeat("#").take(done_width).collect::<String>();
