@@ -5,13 +5,13 @@ extern crate progress;
 
 extern crate quickcheck;
 
-use progress::Progress;
+use progress::builder::ProgressBuilder;
 
 use quickcheck::TestResult;
 
 #[test]
 fn generated_with_default_values() {
-    let p = Progress::default();
+    let p = ProgressBuilder::new().build();
 
     assert_eq!(0, p.current());
     assert_eq!(100, p.total());
@@ -19,7 +19,10 @@ fn generated_with_default_values() {
 
 #[quickcheck]
 fn creates_progress_bar(c: usize, t: usize) -> bool {
-    let p = Progress::new(c, t);
+    let p = ProgressBuilder::new()
+        .set_start(c)
+        .set_finish(t)
+        .build();
 
     (p.current() == c) && (p.total() == t)
 }
@@ -27,14 +30,20 @@ fn creates_progress_bar(c: usize, t: usize) -> bool {
 #[quickcheck]
 fn increments_one(c: usize, t: usize) -> TestResult {
     if c >= t { return TestResult::discard() }
-    let mut p = Progress::new(c, t);
+    let mut p = ProgressBuilder::new()
+        .set_start(c)
+        .set_finish(t)
+        .build();
     p.increment();
     TestResult::from_bool(p.current() == c + 1)
 }
 
 #[quickcheck]
 fn do_not_increment_above_total(t: usize) -> bool {
-    let mut p = Progress::new(t, t);
+    let mut p = ProgressBuilder::new()
+        .set_start(t)
+        .set_finish(t)
+        .build();
     p.increment();
     p.current() == p.total()
 }
@@ -42,14 +51,19 @@ fn do_not_increment_above_total(t: usize) -> bool {
 #[quickcheck]
 fn decrements_one(c: usize, t: usize) -> TestResult {
     if c == 0 { return TestResult::discard() }
-    let mut p = Progress::new(c, t);
+    let mut p = ProgressBuilder::new()
+        .set_start(c)
+        .set_finish(t)
+        .build();
     p.decrement();
     TestResult::from_bool(p.current() == c - 1)
 }
 
 #[quickcheck]
 fn do_not_decrement_below_zero(t: usize) -> bool {
-    let mut p = Progress::new(0, t);
+    let mut p = ProgressBuilder::new()
+        .set_finish(t)
+        .build();
     p.decrement();
     p.current() == 0
 }
@@ -57,12 +71,18 @@ fn do_not_decrement_below_zero(t: usize) -> bool {
 #[quickcheck]
 fn not_finished_while_in_progress(c: usize, t: usize) -> TestResult {
     if c >= t { return TestResult::discard() }
-    let p = Progress::new(c, t);
+    let p = ProgressBuilder::new()
+        .set_start(c)
+        .set_finish(t)
+        .build();
     TestResult::from_bool(!p.finished())
 }
 
 #[quickcheck]
 fn finished_when_finished(t: usize) -> bool {
-    let p = Progress::new(t, t);
+    let p = ProgressBuilder::new()
+        .set_start(t)
+        .set_finish(t)
+        .build();
     p.finished()
 }
