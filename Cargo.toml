@@ -1,6 +1,6 @@
 [package]
-name = "progress"
-version = "0.1.0"
+name = "progress-rs"
+version = "0.1.1"
 authors = ["Norbert Melzer <timmelzer@gmail.com>"]
 
 description = "Display a progressbar on the terminal"
@@ -8,6 +8,9 @@ repository = "https://github.com/NobbZ/progress-rs.git"
 
 license = "MIT"
 license-file = "LICENSE"
+
+[lib]
+name = "progress"
 
 [dependencies]
 
