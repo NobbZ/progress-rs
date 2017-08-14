@@ -80,13 +80,30 @@ fn finished_when_finished() {
 
 #[test]
 fn advances_accordingly() {
-    let mut p = ProgressBuilder::new()
-        .build();
+    let mut p = ProgressBuilder::new().build();
     assert_eq!(0, p.current());
     p.forward(50);
     assert_eq!(50, p.current());
     p.backward(25);
     assert_eq!(25, p.current());
     p.forward(75);
+    assert_eq!(100, p.current());
+}
+
+#[test]
+fn backwards_does_not_get_below_zero() {
+    let mut p = ProgressBuilder::new().build();
+    assert_eq!(0, p.current());
+    p.forward(50);
+    assert_eq!(50, p.current());
+    p.backward(75);
+    assert_eq!(0, p.current());
+}
+
+#[test]
+fn forward_does_not_advance_above_total() {
+    let mut p = ProgressBuilder::new().build();
+    assert_eq!(0, p.current());
+    p.forward(150);
     assert_eq!(100, p.current());
 }

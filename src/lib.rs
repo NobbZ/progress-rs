@@ -54,32 +54,34 @@ impl Progress {
     }
 
     pub fn forward(&mut self, step: usize) -> &Self {
-        self.current += step;
+        let new = self.current + step;
+        if new > self.total {
+            self.current = self.total;
+        } else {
+            self.current += step;
+        }
         print_bar(self);
         self
     }
 
     pub fn backward(&mut self, step: usize) -> &Self {
-        self.current -= step;
+        if self.current < step {
+            self.current = 0;
+        } else {
+            self.current -= step;
+        }
         print_bar(self);
         self
     }
 
     /// Advances the Progress by exactly one.
     pub fn increment(&mut self) -> &Self {
-        if self.current < self.total {
-            self.current += 1;
-        }
-        print_bar(self);
-        self
+        self.forward(1)
     }
 
     /// Does a step backwards at the Progress.
     pub fn decrement(&mut self) -> &Self {
-        if self.current > 0 {
-            self.current -= 1;
-        }
-        self
+        self.backward(1)
     }
 
     /// Determines wheter a Progress has finished (reached the total) or not.
