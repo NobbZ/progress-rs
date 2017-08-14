@@ -53,6 +53,18 @@ impl Progress {
         self.total
     }
 
+    pub fn forward(&mut self, step: usize) -> &Self {
+        self.current += step;
+        print_bar(self);
+        self
+    }
+
+    pub fn backward(&mut self, step: usize) -> &Self {
+        self.current -= step;
+        print_bar(self);
+        self
+    }
+
     /// Advances the Progress by exactly one.
     pub fn increment(&mut self) -> &Self {
         if self.current < self.total {
