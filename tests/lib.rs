@@ -22,6 +22,15 @@ fn creates_progress_bar() {
 }
 
 #[test]
+fn creates_caption() {
+    let p = ProgressBuilder::new()
+        .set_caption("Test".to_owned())
+        .build();
+
+    assert_eq!("Test".to_owned(), *p.caption());
+}
+
+#[test]
 fn increments_one() {
     let mut p = ProgressBuilder::new()
         .set_start(1)

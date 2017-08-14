@@ -31,4 +31,9 @@ impl ProgressBuilder {
         ProgressBuilder { ending_value: Some(v),
                           .. self }
     }
+
+    pub fn set_caption(self, v: String) -> Self {
+        ProgressBuilder { caption: Some(v),
+                          .. self }
+    }
 }
