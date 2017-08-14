@@ -12,10 +12,7 @@ fn generated_with_default_values() {
 
 #[test]
 fn creates_progress_bar() {
-    let p = ProgressBuilder::new()
-        .set_start(5)
-        .set_finish(14)
-        .build();
+    let p = ProgressBuilder::new().set_start(5).set_finish(14).build();
 
     assert_eq!(5, p.current());
     assert_eq!(14, p.total());
@@ -32,10 +29,7 @@ fn creates_caption() {
 
 #[test]
 fn increments_one() {
-    let mut p = ProgressBuilder::new()
-        .set_start(1)
-        .set_finish(192)
-        .build();
+    let mut p = ProgressBuilder::new().set_start(1).set_finish(192).build();
 
     assert_eq!(1, p.current());
     p.increment();
@@ -44,9 +38,7 @@ fn increments_one() {
 
 #[test]
 fn do_not_increment_above_total() {
-    let mut p = ProgressBuilder::new()
-        .set_start(100)
-        .build();
+    let mut p = ProgressBuilder::new().set_start(100).build();
     assert_eq!(100, p.current());
     p.increment();
     assert_eq!(100, p.current());
@@ -65,9 +57,7 @@ fn decrements_one() {
 
 #[test]
 fn do_not_decrement_below_zero() {
-    let mut p = ProgressBuilder::new()
-        .set_finish(124)
-        .build();
+    let mut p = ProgressBuilder::new().set_finish(124).build();
     assert_eq!(0, p.current());
     p.decrement();
     assert_eq!(0, p.current());
@@ -75,10 +65,7 @@ fn do_not_decrement_below_zero() {
 
 #[test]
 fn not_finished_while_in_progress() {
-    let p = ProgressBuilder::new()
-        .set_start(1)
-        .set_finish(345)
-        .build();
+    let p = ProgressBuilder::new().set_start(1).set_finish(345).build();
     assert!(!p.finished());
 }
 

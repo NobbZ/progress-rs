@@ -17,7 +17,7 @@ pub struct Progress {
 
     caption: String,
 
-    started: bool
+    started: bool,
 }
 
 impl Default for Progress {
@@ -28,7 +28,7 @@ impl Default for Progress {
 
 impl Progress {
     /// Returns the current progress absolute value.
-    /// 
+    ///
     /// # Example
     ///
     /// ```
@@ -93,27 +93,32 @@ impl Progress {
 }
 
 fn print_bar(p: &Progress) {
-    let p_info = format!("{current} / {total} ({process})",
-                         current = p.current(),
-                         total   = p.total(),
-                         process = p.process());
+    let p_info = format!(
+        "{current} / {total} ({process})",
+        current = p.current(),
+        total = p.total(),
+        process = p.process()
+    );
     let caption = p.caption();
 
-    let (Width(terminal_width), _) = terminal_size()
-        .unwrap_or((Width(79), Height(0)));
+    let (Width(terminal_width), _) = terminal_size().unwrap_or((Width(79), Height(0)));
 
-    let bar_width  = terminal_width as usize // Width of terminal
+    let bar_width = terminal_width as usize // Width of terminal
         - p_info.len()  // Width of right summary
         - caption.len() // Width of caption
         - 3  // Colon and spaces
         - 2; // vertical bars in the progress meter
     let done_width = (bar_width * p.process() as usize) / 100;
     let todo_width = bar_width - done_width;
-    let done_bar   = std::iter::repeat("#").take(done_width).collect::<String>();
-    let todo_bar   = std::iter::repeat("-").take(todo_width).collect::<String>();
+    let done_bar = std::iter::repeat("#").take(done_width).collect::<String>();
+    let todo_bar = std::iter::repeat("-").take(todo_width).collect::<String>();
     let bar = format!("|{}{}|", done_bar, todo_bar);
 
-    print!("{caption}: {bar} {info}\r",
-           caption = caption, bar = bar, info = p_info);
+    print!(
+        "{caption}: {bar} {info}\r",
+        caption = caption,
+        bar = bar,
+        info = p_info
+    );
     std::io::stdout().flush().unwrap();
 }

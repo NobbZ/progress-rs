@@ -28,19 +28,25 @@ impl ProgressBuilder {
 
     /// Sets the starting value of the `Progress`.
     pub fn set_start(self, v: usize) -> Self {
-        ProgressBuilder { starting_value: Some(v),
-                          .. self }
+        ProgressBuilder {
+            starting_value: Some(v),
+            ..self
+        }
     }
 
     /// Sets the maximum value of the `Progress`.
     pub fn set_finish(self, v: usize) -> Self {
-        ProgressBuilder { ending_value: Some(v),
-                          .. self }
+        ProgressBuilder {
+            ending_value: Some(v),
+            ..self
+        }
     }
 
     /// Sets the caption for the `Progress`.
     pub fn set_caption(self, v: String) -> Self {
-        ProgressBuilder { caption: Some(v),
-                          .. self }
+        ProgressBuilder {
+            caption: Some(v),
+            ..self
+        }
     }
 }
