@@ -6,7 +6,10 @@ use terminal_size::{Width, Height, terminal_size};
 
 pub mod builder;
 
-/// Tracks progress of a task
+/// Tracks progress of a task.
+///
+/// There should be not more than a single instance started at a given point in
+/// time, it will mangle your terminal output.
 pub struct Progress {
     current: usize,
     total: usize,
@@ -23,14 +26,33 @@ impl Default for Progress {
 }
 
 impl Progress {
+    /// Returns the current progress absolute value.
+    /// 
+    /// # Example
+    ///
+    /// ```
+    /// use progress::Progress;
+    /// let p = Progress::default();
+    /// assert_eq!(0, p.current());
+    /// ```
     pub fn current(&self) -> usize {
         self.current
     }
 
+    /// Returns the total value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use progress::Progress;
+    /// let p = Progress::default();
+    /// assert_eq!(100, p.total());
+    /// ```
     pub fn total(&self) -> usize {
         self.total
     }
 
+    /// Advances the Progress by exactly one.
     pub fn increment(&mut self) -> &Self {
         if self.current < self.total {
             self.current += 1;
@@ -39,6 +61,7 @@ impl Progress {
         self
     }
 
+    /// Does a step backwards at the Progress.
     pub fn decrement(&mut self) -> &Self {
         if self.current > 0 {
             self.current -= 1;
@@ -46,19 +69,23 @@ impl Progress {
         self
     }
 
+    /// Determines wheter a Progress has finished (reached the total) or not.
     pub fn finished(&self) -> bool {
         self.current >= self.total
     }
 
+    /// Returns the relative value of the Progress.
     pub fn process(&self) -> u8 {
         (self.current * 100 / self.total) as u8
     }
 
+    /// Activates the Progress.
     pub fn start(&mut self) -> &Self {
         self.started = true;
         self
     }
 
+    /// Returns the current caption.
     pub fn caption(&self) -> &String {
         &self.caption
     }
