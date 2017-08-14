@@ -5,6 +5,7 @@ use std::io::Write;
 use terminal_size::{Width, Height, terminal_size};
 
 pub mod builder;
+pub use builder::ProgressBuilder as Builder;
 
 /// Tracks progress of a task.
 ///
