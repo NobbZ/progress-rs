@@ -12,21 +12,24 @@ fn generated_with_default_values() {
 
 #[test]
 fn creates_progress_bar() {
-    let p = ProgressBuilder::new()
-        .set_start(5)
-        .set_finish(14)
-        .build();
+    let p = ProgressBuilder::new().set_start(5).set_finish(14).build();
 
     assert_eq!(5, p.current());
     assert_eq!(14, p.total());
 }
 
 #[test]
-fn increments_one() {
-    let mut p = ProgressBuilder::new()
-        .set_start(1)
-        .set_finish(192)
+fn creates_caption() {
+    let p = ProgressBuilder::new()
+        .set_caption("Test".to_owned())
         .build();
+
+    assert_eq!("Test".to_owned(), *p.caption());
+}
+
+#[test]
+fn increments_one() {
+    let mut p = ProgressBuilder::new().set_start(1).set_finish(192).build();
 
     assert_eq!(1, p.current());
     p.increment();
@@ -35,9 +38,7 @@ fn increments_one() {
 
 #[test]
 fn do_not_increment_above_total() {
-    let mut p = ProgressBuilder::new()
-        .set_start(100)
-        .build();
+    let mut p = ProgressBuilder::new().set_start(100).build();
     assert_eq!(100, p.current());
     p.increment();
     assert_eq!(100, p.current());
@@ -56,9 +57,7 @@ fn decrements_one() {
 
 #[test]
 fn do_not_decrement_below_zero() {
-    let mut p = ProgressBuilder::new()
-        .set_finish(124)
-        .build();
+    let mut p = ProgressBuilder::new().set_finish(124).build();
     assert_eq!(0, p.current());
     p.decrement();
     assert_eq!(0, p.current());
@@ -66,10 +65,7 @@ fn do_not_decrement_below_zero() {
 
 #[test]
 fn not_finished_while_in_progress() {
-    let p = ProgressBuilder::new()
-        .set_start(1)
-        .set_finish(345)
-        .build();
+    let p = ProgressBuilder::new().set_start(1).set_finish(345).build();
     assert!(!p.finished());
 }
 
@@ -80,4 +76,34 @@ fn finished_when_finished() {
         .set_finish(124)
         .build();
     assert!(p.finished());
+}
+
+#[test]
+fn advances_accordingly() {
+    let mut p = ProgressBuilder::new().build();
+    assert_eq!(0, p.current());
+    p.forward(50);
+    assert_eq!(50, p.current());
+    p.backward(25);
+    assert_eq!(25, p.current());
+    p.forward(75);
+    assert_eq!(100, p.current());
+}
+
+#[test]
+fn backwards_does_not_get_below_zero() {
+    let mut p = ProgressBuilder::new().build();
+    assert_eq!(0, p.current());
+    p.forward(50);
+    assert_eq!(50, p.current());
+    p.backward(75);
+    assert_eq!(0, p.current());
+}
+
+#[test]
+fn forward_does_not_advance_above_total() {
+    let mut p = ProgressBuilder::new().build();
+    assert_eq!(0, p.current());
+    p.forward(150);
+    assert_eq!(100, p.current());
 }
