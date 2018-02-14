@@ -1,6 +1,7 @@
 extern crate terminal_size;
 
 use std::io::Write;
+use std::ops::AddAssign;
 
 use terminal_size::{terminal_size, Height, Width};
 
@@ -54,13 +55,7 @@ impl Progress {
     }
 
     pub fn forward(&mut self, step: usize) -> &Self {
-        let new = self.current + step;
-        if new > self.total {
-            self.current = self.total;
-        } else {
-            self.current += step;
-        }
-        print_bar(self);
+        *self += step;
         self
     }
 
@@ -103,6 +98,18 @@ impl Progress {
     /// Returns the current caption.
     pub fn caption(&self) -> &String {
         &self.caption
+    }
+}
+
+impl AddAssign<usize> for Progress {
+    fn add_assign(&mut self, step: usize) {
+        let new = self.current + step;
+        if new > self.total {
+            self.current = self.total;
+        } else {
+            self.current += step;
+        }
+        print_bar(self);
     }
 }
 
