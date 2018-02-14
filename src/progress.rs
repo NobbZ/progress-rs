@@ -1,4 +1,3 @@
-use builder::ProgressBuilder as PB;
 use std::iter::repeat;
 use std::io::{stdout, Write};
 use std::ops::{AddAssign, SubAssign};
@@ -19,7 +18,7 @@ pub struct Progress {
 
 impl Default for Progress {
     fn default() -> Progress {
-        PB::default().build()
+        Progress::new("Progress", 0, 100)
     }
 }
 

@@ -1,7 +1,5 @@
 use progress::Progress;
 
-#[allow(deprecated)]
-
 /// **Deprecation**: Using this directly as `progress::builder::ProgressBuilder`
 /// is deprecated, please use `progress::Builder` instead.
 #[derive(Default)]
@@ -13,6 +11,7 @@ pub struct ProgressBuilder {
     caption: Option<String>,
 }
 
+#[allow(deprecated)]
 impl ProgressBuilder {
     /// Creates a new `Builder` with default values.
     pub fn new() -> Self {
