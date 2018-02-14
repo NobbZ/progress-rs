@@ -54,11 +54,37 @@ impl Progress {
         self.total
     }
 
+    /// Advances the Progress by a certain amount.
+    ///
+    /// # Examplw
+    ///
+    /// ```
+    /// use progress::Progress;
+    /// let mut p = Progress::default();
+    /// assert_eq!(0, p.current());
+    /// p.forward(10);
+    /// assert_eq!(10, p.current());
+    /// p += 20;
+    /// assert_eq!(30, p.current());
+    /// ```
     pub fn forward(&mut self, step: usize) -> &Self {
         *self += step;
         self
     }
 
+    /// Advances the Progress by a certain amount.
+    ///
+    /// # Examplw
+    ///
+    /// ```
+    /// use progress::Builder;
+    /// let mut p = Builder::new().set_start(30).build();
+    /// assert_eq!(30, p.current());
+    /// p.backward(10);
+    /// assert_eq!(20, p.current());
+    /// p -= 20;
+    /// assert_eq!(0, p.current());
+    /// ```
     pub fn backward(&mut self, step: usize) -> &Self {
         *self -= step;
         self
