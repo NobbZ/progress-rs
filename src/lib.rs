@@ -2,7 +2,7 @@ extern crate terminal_size;
 
 use std::io::Write;
 
-use terminal_size::{Width, Height, terminal_size};
+use terminal_size::{terminal_size, Height, Width};
 
 pub mod builder;
 pub use builder::ProgressBuilder as Builder;
