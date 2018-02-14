@@ -1,7 +1,7 @@
 extern crate terminal_size;
 
 use std::io::Write;
-use std::ops::AddAssign;
+use std::ops::{AddAssign, SubAssign};
 
 use terminal_size::{terminal_size, Height, Width};
 
@@ -60,12 +60,7 @@ impl Progress {
     }
 
     pub fn backward(&mut self, step: usize) -> &Self {
-        if self.current < step {
-            self.current = 0;
-        } else {
-            self.current -= step;
-        }
-        print_bar(self);
+        *self -= step;
         self
     }
 
@@ -109,6 +104,13 @@ impl AddAssign<usize> for Progress {
         } else {
             self.current += step;
         }
+        print_bar(self);
+    }
+}
+
+impl SubAssign<usize> for Progress {
+    fn sub_assign(&mut self, step: usize) {
+        self.current = self.current.saturating_sub(step);
         print_bar(self);
     }
 }
