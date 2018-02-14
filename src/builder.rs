@@ -21,7 +21,7 @@ impl ProgressBuilder {
         Progress {
             current: self.starting_value.unwrap_or(0),
             total: self.ending_value.unwrap_or(100),
-            caption: self.caption.unwrap_or("Progress".to_string()),
+            caption: self.caption.unwrap_or_else(|| "Progress".to_string()),
             started: false,
         }
     }
