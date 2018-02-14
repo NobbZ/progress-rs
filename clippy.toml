@@ -1,1 +1,1 @@
-blacklisted-name =  ["foo", "baz", "quux"]
+blacklisted-names =  ["foo", "baz", "quux"]
