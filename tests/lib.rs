@@ -1,10 +1,10 @@
 extern crate progress;
 
-use progress::builder::ProgressBuilder;
+use progress::Progress;
 
 #[test]
 fn generated_with_default_values() {
-    let p = ProgressBuilder::new().build();
+    let p = Progress::default();
 
     assert_eq!(0, p.current());
     assert_eq!(100, p.total());
@@ -12,7 +12,7 @@ fn generated_with_default_values() {
 
 #[test]
 fn creates_progress_bar() {
-    let p = ProgressBuilder::new().set_start(5).set_finish(14).build();
+    let p = Progress::new("", 5, 14);
 
     assert_eq!(5, p.current());
     assert_eq!(14, p.total());
@@ -20,16 +20,14 @@ fn creates_progress_bar() {
 
 #[test]
 fn creates_caption() {
-    let p = ProgressBuilder::new()
-        .set_caption("Test".to_owned())
-        .build();
+    let p = Progress::new("Test", 0, 100);
 
     assert_eq!("Test".to_owned(), *p.caption());
 }
 
 #[test]
 fn increments_one() {
-    let mut p = ProgressBuilder::new().set_start(1).set_finish(192).build();
+    let mut p = Progress::new("", 1, 192);
 
     assert_eq!(1, p.current());
     p.increment();
@@ -38,7 +36,7 @@ fn increments_one() {
 
 #[test]
 fn do_not_increment_above_total() {
-    let mut p = ProgressBuilder::new().set_start(100).build();
+    let mut p = Progress::new("", 100, 100);
     assert_eq!(100, p.current());
     p.increment();
     assert_eq!(100, p.current());
@@ -46,10 +44,7 @@ fn do_not_increment_above_total() {
 
 #[test]
 fn decrements_one() {
-    let mut p = ProgressBuilder::new()
-        .set_start(235)
-        .set_finish(1232)
-        .build();
+    let mut p = Progress::new("", 235, 1232);
     assert_eq!(235, p.current());
     p.decrement();
     assert_eq!(234, p.current());
@@ -57,7 +52,7 @@ fn decrements_one() {
 
 #[test]
 fn do_not_decrement_below_zero() {
-    let mut p = ProgressBuilder::new().set_finish(124).build();
+    let mut p = Progress::new("", 0, 124);
     assert_eq!(0, p.current());
     p.decrement();
     assert_eq!(0, p.current());
@@ -65,22 +60,19 @@ fn do_not_decrement_below_zero() {
 
 #[test]
 fn not_finished_while_in_progress() {
-    let p = ProgressBuilder::new().set_start(1).set_finish(345).build();
+    let p = Progress::new("", 1, 345);
     assert!(!p.finished());
 }
 
 #[test]
 fn finished_when_finished() {
-    let p = ProgressBuilder::new()
-        .set_start(124)
-        .set_finish(124)
-        .build();
+    let p = Progress::new("", 124, 124);
     assert!(p.finished());
 }
 
 #[test]
 fn advances_accordingly() {
-    let mut p = ProgressBuilder::new().build();
+    let mut p = Progress::default();
     assert_eq!(0, p.current());
     p.forward(50);
     assert_eq!(50, p.current());
@@ -92,7 +84,7 @@ fn advances_accordingly() {
 
 #[test]
 fn backwards_does_not_get_below_zero() {
-    let mut p = ProgressBuilder::new().build();
+    let mut p = Progress::default();
     assert_eq!(0, p.current());
     p.forward(50);
     assert_eq!(50, p.current());
@@ -102,7 +94,7 @@ fn backwards_does_not_get_below_zero() {
 
 #[test]
 fn forward_does_not_advance_above_total() {
-    let mut p = ProgressBuilder::new().build();
+    let mut p = Progress::default();
     assert_eq!(0, p.current());
     p.forward(150);
     assert_eq!(100, p.current());
