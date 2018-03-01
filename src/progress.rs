@@ -13,6 +13,8 @@ pub struct Progress {
 
     caption: String,
 
+    width: Option<u16>,
+
     started: bool,
 }
 
@@ -28,6 +30,20 @@ impl Progress {
             current: start,
             total: end,
             caption: caption.into(),
+            width: None,
+            started: false,
+        }
+    }
+
+    pub fn new_with_width<S>(caption: S, start: usize, end: usize, width: u16) -> Self
+    where
+        S: Into<String>,
+    {
+        Progress {
+            current: start,
+            total: end,
+            caption: caption.into(),
+            width: Some(width),
             started: false,
         }
     }
@@ -154,7 +170,8 @@ fn print_bar(p: &Progress) {
     );
     let caption = p.caption();
 
-    let (Width(terminal_width), _) = terminal_size().unwrap_or((Width(79), Height(0)));
+    let terminal_width = p.width
+        .unwrap_or_else(terminal_size().unwrap_or(((Width(79), Height(0)).0).0)); // terminal_size().unwrap_or((Width(79), Height(0)));
 
     let bar_width = terminal_width as usize // Width of terminal
         - p_info.len()  // Width of right summary
