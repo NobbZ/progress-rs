@@ -162,6 +162,10 @@ impl SubAssign<usize> for Progress {
 }
 
 fn print_bar(p: &Progress) {
+    const COLONS: usize = 1;
+    const SPACES: usize = 2;
+    const PIPES: usize = 2;
+    const OTHER: usize = COLONS + SPACES + PIPES;
     let p_info = format!(
         "{current} / {total} ({process})",
         current = p.current(),
@@ -171,17 +175,16 @@ fn print_bar(p: &Progress) {
     let caption = p.caption();
 
     let terminal_width = p.width
-        .unwrap_or_else(|| terminal_size().unwrap_or((Width(79), Height(0))).0 .0); // terminal_size().unwrap_or((Width(79), Height(0)));
+        .unwrap_or_else(|| terminal_size().unwrap_or((Width(79), Height(0))).0 .0);
 
     let bar_width = terminal_width as usize // Width of terminal
         - p_info.len()  // Width of right summary
         - caption.len() // Width of caption
-        - 3  // Colon and spaces
-        - 2; // vertical bars in the progress meter
+        - OTHER;
     let done_width = (bar_width * p.process() as usize) / 100;
     let todo_width = bar_width - done_width;
-    let done_bar = repeat("#").take(done_width).collect::<String>();
-    let todo_bar = repeat("-").take(todo_width).collect::<String>();
+    let done_bar = repeat('#').take(done_width).collect::<String>();
+    let todo_bar = repeat('-').take(todo_width).collect::<String>();
     let bar = format!("|{}{}|", done_bar, todo_bar);
 
     print!(
