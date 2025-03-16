@@ -16,7 +16,6 @@
         rust = pkgs.rust-bin.stable.${rustVersion}.default.override {
           extensions = ["rust-src" "rust-analyzer"];
         };
-        rustfmt = pkgs.rust-bin.nightly.latest.rustfmt;
       in {
         _module.args.pkgs = pkgsWithOverlays;
 
@@ -24,17 +23,7 @@
 
         legacyPackages = {inherit rust;};
 
-        devShells.default = pkgs.mkShell {
-          packages = [rustfmt] ++ builtins.attrValues {
-            inherit (pkgs) cargo-nextest cargo-audit cargo-deny cargo-tarpaulin;
-            inherit (pkgs) nil pre-commit reuse;
-            inherit (pkgs) watchexec;
-            inherit (pkgs) cmake pkg-config;
-            inherit rust;
-          };
-
-          env.RUST_SRC_PATH = "${rust}/lib/rustlib/src/rust/library";
-        };
+        devShells.default = pkgs.callPackage ./shell.nix {};
       };
     };
 
